@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="FuzzyCMeans:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/FuzzyCMeans_jar</output-path>
+    <root id="archive" name="FuzzyCMeans.jar">
+      <element id="module-output" name="FuzzyCMeans" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jansi-1.17.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

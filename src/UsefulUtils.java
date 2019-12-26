@@ -104,4 +104,16 @@ public class UsefulUtils {
         df.setMaximumFractionDigits(maxFractionDigits);
         return df.format(number);
     }
+
+    public static void updateProgress(String title, double done, double all){
+        System.out.print("\r");
+        System.out.print(title + ": " +
+                UsefulUtils.formatDecimalNumber(done / all * 100, 2) + "%");
+    }
+
+    public static void announceFinishingTask(String annoncement){
+        System.out.print("\r");
+        StylishPrinter.print("✔", StylishPrinter.BOLD_GREEN);
+        System.out.println(" " + annoncement);
+    }
 }

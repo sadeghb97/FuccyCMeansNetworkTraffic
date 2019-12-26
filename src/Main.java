@@ -49,28 +49,31 @@ public class Main {
         domains = new ArrayList();
         boundsList = new ArrayList();
         try {
-            System.out.print("Preparing Data: ");
+            System.out.print("Load records: 0%");
             String contents = UsefulUtils.readAllFile("kddcup.data_10_percent_corrected");
             String[] pieces = contents.split("\n");
 
-            for (String item : pieces){
+            for (int i=0; pieces.length>i; i++){
+                String item = pieces[i];
                 String[] itemPieces = item.split(",");
                 ArrayList itemValues = new ArrayList();
-                int i=0;
+                int j=0;
                 for (String v: itemPieces) {
                     itemValues.add(v);
-                    if(domains.size() <= i) domains.add(new ArrayList());
-                    if(!domains.get(i).contains(v)) domains.get(i).add(v);
-                    i++;
+                    if(domains.size() <= j) domains.add(new ArrayList());
+                    if(!domains.get(j).contains(v)) domains.get(j).add(v);
+                    j++;
                 }
                 data.add(new Point(itemValues));
+                UsefulUtils.updateProgress("Load records", i, pieces.length);
             }
-            System.out.print(".");
+            UsefulUtils.announceFinishingTask("All records loaded");
         }
         catch (Exception ex){
             System.out.println(ex.getMessage());
         }
 
+        System.out.print("Finding fields bounds: 0%");
         for(int i=0; domains.size()>i; i++){
             if(UsefulUtils.isNumeric((String) domains.get(i).get(0))){
                 double[] bounds = Cluster.getMinAndMax(domains.get(i));
@@ -80,9 +83,12 @@ public class Main {
                 double[] bounds = {0, domains.get(i).size() - 1};
                 boundsList.add(bounds);
             }
-        }
-        System.out.print(".");
 
+            UsefulUtils.updateProgress("Finding fields bounds", i, domains.size());
+        }
+        UsefulUtils.announceFinishingTask("Fileds bounds generated");
+
+        System.out.print("Scaling records: 0%");
         for (int i=0; data.size()>i; i++) {
             data.get(i).create();
             for(int j=0; data.get(i).source.size()>j; j++){
@@ -99,9 +105,9 @@ public class Main {
                     data.get(i).add(scaledValue);
                 else data.get(i).add(scaledValue == 0 ? 0 : 1);
             }
+            UsefulUtils.updateProgress("Scaling records", i, data.size());
         }
-        System.out.println(".");
-        System.out.println(data.size() + " records loaded successfuly!");
+        UsefulUtils.announceFinishingTask("All records scaled");
     }
 
     public static void showDomains(){

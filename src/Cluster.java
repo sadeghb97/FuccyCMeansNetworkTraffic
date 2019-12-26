@@ -114,19 +114,17 @@ public class Cluster {
                     UsefulUtils.formatDecimalNumber(conv * 100, 2) + "%"
                     );
         }
-        System.out.print("\r");
-        StylishPrinter.print("✔", StylishPrinter.BOLD_GREEN);
-        System.out.println(" K-Means Clustering finished successfuly");
+        UsefulUtils.announceFinishingTask("K-Means Clustering finished successfuly");
         StylishPrinter.print("◉", StylishPrinter.BOLD_GREEN);
         System.out.println(" Convergence: " +
                 UsefulUtils.formatDecimalNumber(conv * 100, 2) + "%");
         StylishPrinter.print("◉", StylishPrinter.BOLD_GREEN);
         System.out.println(" Execution number: " + exeNum);
 
-        System.out.println("\nFCNormal: " + firstCluster.normalRecords);
-        System.out.println("FCAttack: " + firstCluster.attackRecords);
-        System.out.println("SCNormal: " + secondCluster.normalRecords);
-        System.out.println("SCAttack: " + secondCluster.attackRecords);
+        System.out.println("\nFCNormal: " + UsefulUtils.getWideNumber(firstCluster.normalRecords));
+        System.out.println("FCAttack: " + UsefulUtils.getWideNumber(firstCluster.attackRecords));
+        System.out.println("SCNormal: " + UsefulUtils.getWideNumber(secondCluster.normalRecords));
+        System.out.println("SCAttack: " + UsefulUtils.getWideNumber(secondCluster.attackRecords));
 
         double fcAttacksRate = ((double) firstCluster.attackRecords) / firstCluster.points.size();
         double scAttacksRate = ((double) secondCluster.attackRecords) / secondCluster.points.size();
@@ -172,25 +170,13 @@ public class Cluster {
                         Math.pow(secondClusterDistance/secondClusterDistance, 2/(M - 1));
                 double tempSecondMem = 1 / makhraj;
 
-                //UsefulUtils.printList(firstCluster.center.cordinates);
-                //UsefulUtils.printList(secondCluster.center.cordinates);
                 point.firstClusterMembership = tempFirstMem / (tempFirstMem + tempSecondMem);
                 point.secondClusterMembership = tempSecondMem / (tempFirstMem + tempSecondMem);
-                //System.out.println(i + ": firstCD: " + firstClusterDistance);
-                //System.out.println(i + ": secondCD: " + secondClusterDistance);
-                //System.out.println(i + ": firstCM: " + point.firstClusterMembership);
-                //System.out.println(i + ": secondCM: " + point.secondClusterMembership);
             }
             calculateFCMCenter(firstCluster, secondCluster, learningSet);
-
-            System.out.print("\r");
-            System.out.print("FCM Clustering: " +
-                    UsefulUtils.formatDecimalNumber(
-                            ((double) i) / maxExecution * 100, 2) + "%");
+            UsefulUtils.updateProgress("FCM Clustering", i, maxExecution);
         }
-        System.out.print("\r");
-        StylishPrinter.print("✔", StylishPrinter.BOLD_GREEN);
-        System.out.println(" FCM Clustering finished successfuly");
+        UsefulUtils.announceFinishingTask("FCM Clustering finished successfuly");
 
         double firstAttacksSum = 0;
         double firstNormalSum = 0;
@@ -259,16 +245,11 @@ public class Cluster {
         System.out.print("Init learning set and test set: 0%");
         while(targetLearningSetSize > learningSet.size()){
             learningSet.add(testSet.remove(random.nextInt(testSet.size())));
-            System.out.print("\r");
-            System.out.print("Init learning and test set: " +
-                    UsefulUtils.formatDecimalNumber(
-                            ((double) learningSet.size()) / targetLearningSetSize * 100, 2) +
-                    "%");
+            UsefulUtils.updateProgress("Init learning and test set", learningSet.size(),
+                    targetLearningSetSize);
         }
-
-        System.out.print("\r");
-        StylishPrinter.print("✔", StylishPrinter.BOLD_GREEN);
-        System.out.println(" Init learning and test set finished successfuly");
+        UsefulUtils.announceFinishingTask(
+                "Init learning and test set finished successfuly");
 
         StylishPrinter.print("◉", StylishPrinter.BOLD_GREEN);
         System.out.println(" AllSize: " + learningSet.size() + testSet.size());
