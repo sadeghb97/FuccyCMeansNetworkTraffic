@@ -81,11 +81,12 @@ public class Cluster {
         initLearningAndTestSet(testSet, learningSet, targetLearningSetSize);
 
         System.out.println();
-        System.out.print("K-Means Clustering: 0%");
+        UsefulUtils.startProgressingProcess("K-Means Clustering");
         int maxExecution = 300;
         double conv = 0;
         int exeNum = 0;
-        for(; maxExecution>exeNum && conv < 0.96; exeNum++){
+        int minExe = 15;
+        for(; minExe>exeNum || (maxExecution>exeNum && conv < 0.85); exeNum++){
             firstCluster.create();
             secondCluster.create();
             for(int j=0; learningSet.size()>j; j++){
@@ -107,12 +108,17 @@ public class Cluster {
                     (fcAttacksRate + scAttacksRate);
 
             System.out.print("\r");
-            System.out.print("K-Means Clustering: " +
-                    UsefulUtils.formatDecimalNumber(
-                            ((double) exeNum) / maxExecution * 100, 2) +
-                    "% | Convergence: " +
-                    UsefulUtils.formatDecimalNumber(conv * 100, 2) + "%"
-                    );
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("K-Means Clustering: ");
+            stringBuilder.append(UsefulUtils.formatDecimalNumber(
+                    ((double) exeNum) / maxExecution * 100, 2));
+            stringBuilder.append("% | Convergence: ");
+            stringBuilder.append(
+                    UsefulUtils.formatDecimalNumber(conv * 100, 2));
+            stringBuilder.append("%");
+            for(int i=stringBuilder.toString().length(); 60>i; i++)
+                stringBuilder.append(" ");
+            System.out.print(stringBuilder.toString());
         }
         UsefulUtils.announceFinishingTask("K-Means Clustering finished successfuly");
         StylishPrinter.print("◉", StylishPrinter.BOLD_GREEN);
@@ -152,7 +158,7 @@ public class Cluster {
         initLearningAndTestSet(testSet, learningSet, targetLearningSetSize);
 
         System.out.println();
-        System.out.print("FCM Clustering: 0%");
+        UsefulUtils.startProgressingProcess("FCM Clustering");
         int maxExecution = 25;
         for(int i=0; maxExecution>i; i++){
             firstCluster.create();
@@ -242,7 +248,7 @@ public class Cluster {
             ArrayList<Point> learningSet, int targetLearningSetSize){
 
         Random random = new Random();
-        System.out.print("Init learning set and test set: 0%");
+        UsefulUtils.startProgressingProcess("Init learning set and test set");
         while(targetLearningSetSize > learningSet.size()){
             learningSet.add(testSet.remove(random.nextInt(testSet.size())));
             UsefulUtils.updateProgress("Init learning and test set", learningSet.size(),
@@ -252,11 +258,12 @@ public class Cluster {
                 "Init learning and test set finished successfuly");
 
         StylishPrinter.print("◉", StylishPrinter.BOLD_GREEN);
-        System.out.println(" AllSize: " + learningSet.size() + testSet.size());
+        System.out.println(" AllSize: " +
+                UsefulUtils.getWideNumber(learningSet.size() + testSet.size()));
         StylishPrinter.print("◉", StylishPrinter.BOLD_GREEN);
-        System.out.println(" TestSetSize: " + testSet.size());
+        System.out.println(" TestSetSize: " + UsefulUtils.getWideNumber(testSet.size()));
         StylishPrinter.print("◉", StylishPrinter.BOLD_GREEN);
-        System.out.println(" LearninSetSize: " + learningSet.size());
+        System.out.println(" LearninSetSize: " + UsefulUtils.getWideNumber(learningSet.size()));
     }
 
     public static double getDistance(Point firstPoint, Point secondPoint){

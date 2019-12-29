@@ -1,9 +1,7 @@
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
 
 public class Main {
     private static ArrayList<Point> data;
@@ -12,18 +10,6 @@ public class Main {
 
     public static void main(String[] args) {
         while (mainMenu());
-        /*ArrayList listOne = new ArrayList();
-        listOne.add(12);
-        listOne.add(12.24);
-        listOne.add(124.215);
-        listOne.add(29.78);
-        listOne.add(32.644);
-        ArrayList listTwo = (ArrayList) listOne.clone();
-        listTwo.remove(2);
-        listTwo.remove(3);
-        UsefulUtils.printList(listOne);
-        UsefulUtils.printList(listTwo);*/
-
     }
 
     public static boolean mainMenu(){
@@ -49,7 +35,7 @@ public class Main {
         domains = new ArrayList();
         boundsList = new ArrayList();
         try {
-            System.out.print("Load records: 0%");
+            UsefulUtils.startProgressingProcess("Load records");
             String contents = UsefulUtils.readAllFile("kddcup.data_10_percent_corrected");
             String[] pieces = contents.split("\n");
 
@@ -73,7 +59,7 @@ public class Main {
             System.out.println(ex.getMessage());
         }
 
-        System.out.print("Finding fields bounds: 0%");
+        UsefulUtils.startProgressingProcess("Finding fields bounds");
         for(int i=0; domains.size()>i; i++){
             if(UsefulUtils.isNumeric((String) domains.get(i).get(0))){
                 double[] bounds = Cluster.getMinAndMax(domains.get(i));
@@ -88,7 +74,7 @@ public class Main {
         }
         UsefulUtils.announceFinishingTask("Fileds bounds generated");
 
-        System.out.print("Scaling records: 0%");
+        UsefulUtils.startProgressingProcess("Scaling records");
         for (int i=0; data.size()>i; i++) {
             data.get(i).create();
             for(int j=0; data.get(i).source.size()>j; j++){

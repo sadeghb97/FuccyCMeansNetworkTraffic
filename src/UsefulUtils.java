@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -105,15 +106,33 @@ public class UsefulUtils {
         return df.format(number);
     }
 
+    public static void startProgressingProcess(String title){
+        InvokeCommand.deleteBlinkingCursor();
+        System.out.print(title + ": 0%");
+    }
+
     public static void updateProgress(String title, double done, double all){
         System.out.print("\r");
-        System.out.print(title + ": " +
-                UsefulUtils.formatDecimalNumber(done / all * 100, 2) + "%");
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(title);
+        stringBuilder.append(": ");
+        stringBuilder.append(
+                UsefulUtils.formatDecimalNumber(done / all * 100, 2));
+        stringBuilder.append("%");
+        for(int i=stringBuilder.toString().length(); 60>i; i++)
+            stringBuilder.append(" ");
+        System.out.print(stringBuilder.toString());
     }
 
     public static void announceFinishingTask(String annoncement){
         System.out.print("\r");
         StylishPrinter.print("✔", StylishPrinter.BOLD_GREEN);
-        System.out.println(" " + annoncement);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(" ");
+        stringBuilder.append(annoncement);
+        for(int i=stringBuilder.toString().length(); 60>i; i++)
+            stringBuilder.append(" ");
+        System.out.println(stringBuilder.toString());
+        InvokeCommand.recoverBlinkingCursor();
     }
 }
