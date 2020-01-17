@@ -1,9 +1,8 @@
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Random;
 
 public class Cluster {
-    public final static double M = 1.001;
+    public final static double M = 2;
     public ArrayList<Point> points;
     public Point center;
     public int normalRecords;
@@ -25,8 +24,8 @@ public class Cluster {
         normalRecords = 0;
         attackRecords = 0;
         for(int i=0; points.size()>i; i++){
-            if(points.get(i).get(0) > 0) attackRecords++;
-            else normalRecords++;
+            if(points.get(i).isNormal()) normalRecords++;
+            else attackRecords++;
         }
     }
 
@@ -82,7 +81,7 @@ public class Cluster {
 
         System.out.println();
         UsefulUtils.startProgressingProcess("K-Means Clustering");
-        int maxExecution = 300;
+        int maxExecution = 20;
         double conv = 0;
         int exeNum = 0;
         int minExe = 15;
@@ -159,7 +158,7 @@ public class Cluster {
 
         System.out.println();
         UsefulUtils.startProgressingProcess("FCM Clustering");
-        int maxExecution = 25;
+        int maxExecution = 20;
         for(int i=0; maxExecution>i; i++){
             firstCluster.create();
             secondCluster.create();
@@ -268,7 +267,7 @@ public class Cluster {
 
     public static double getDistance(Point firstPoint, Point secondPoint){
         double sum = 0;
-        for(int i=0; firstPoint.size()>i; i++){
+        for(int i=0; (firstPoint.size() - 1)>i; i++){
             double minus = firstPoint.get(i) - secondPoint.get(i);
             double pow = Math.pow(minus, 2);
             sum += pow;
